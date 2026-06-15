@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#1e293b">
+    <title>Sproochentest Prep</title>
+    <style>
+        :root {
+            --primary: #3b82f6;
+            --primary-dark: #2563eb;
+            --accent: #f59e0b;
+            --bg: #f8fafc;
+            --card: #ffffff;
+            --text: #1e293b;
+            --text-secondary: #64748b;
+            --text-light: #94a3b8;
+            --success: #10b981;
+            --error: #ef4444;
+            --border: #e2e8f0;
+            --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.04);
+            --shadow-lg: 0 4px 6px rgba(0,0,0,0.07), 0 2px 4px rgba(0,0,0,0.05);
+            --radius: 16px;
+            --safe-bottom: env(safe-area-inset-bottom, 0px);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { height: 100%; scroll-behavior: smooth; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            min-height: 100%;
+            -webkit-text-size-adjust: 100%;
+            -webkit-tap-highlight-color: transparent;
+            padding-bottom: calc(5rem + var(--safe-bottom));
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            color: white;
+            padding: 1.25rem 1.25rem 1rem;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+        .header-top { display: flex; justify-content: space-between; align-items: center; }
+        .header h1 { font-size: 1.2rem; font-weight: 700; letter-spacing: -0.02em; }
+        .header .subtitle { font-size: 0.75rem; color: #94a3b8; margin-top: 0.15rem; }
+        .header .badge {
+            background: var(--accent);
+            color: #1e293b;
+            padding: 0.2rem 0.6rem;
+            border-radius: 2rem;
+            font-size: 0.65rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        /* Container */
+        .container { padding: 1rem; max-width: 600px; margin: 0 auto; }
+
+        /* Cards */
+        .card {
+            background: var(--card);
+            border-radius: var(--radius);
+            padding: 1.25rem;
+            margin-bottom: 1rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            transition: transform 0.15s, box-shadow 0.15s;
+        }
+        .card:active { transform: scale(0.99); }
+        .card h2 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            color: var(--text);
+            letter-spacing: -0.01em;
+        }
+        .card h3 { font-size: 0.95rem; font-weight: 600; margin: 0.75rem 0 0.5rem; }
+        .card p { font-size: 0.88rem; color: var(--text-secondary); line-height: 1.6; }
+        .card ul { padding-left: 1.25rem; margin: 0.5rem 0; }
+        .card li { font-size: 0.88rem; margin-bottom: 0.35rem; color: var(--text-secondary); }
+        .card table { width: 100%; border-collapse: collapse; font-size: 0.82rem; margin: 0.5rem 0; }
+        .card th, .card td { padding: 0.4rem 0.5rem; border: 1px solid var(--border); text-align: left; }
+        .card th { background: #f1f5f9; font-weight: 600; }
+
+        /* Section titles */
+        .section-label {
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--text-light);
+            margin: 1.25rem 0 0.5rem;
+            padding-left: 0.25rem;
+        }
+
+        /* Topic pills */
+        .topic-grid { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+        .topic-pill {
+            padding: 0.5rem 0.9rem;
+            border-radius: 2rem;
+            font-size: 0.8rem;
+            font-weight: 500;
+            background: #f1f5f9;
+            color: var(--text);
+            border: 1px solid var(--border);
+            cursor: pointer;
+            transition: all 0.15s;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .topic-pill:active, .topic-pill.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        /* Phrase list */
+        .phrase-item {
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            gap: 0.2rem;
+        }
+        .phrase-item:last-child { border-bottom: none; }
+        .phrase-lux { font-weight: 600; font-size: 0.92rem; color: var(--text); }
+        .phrase-en { font-size: 0.82rem; color: var(--text-secondary); }
+
+        /* Flashcard */
+        .flashcard-container { perspective: 1000px; margin: 0.75rem 0; }
+        .flashcard {
+            min-height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            cursor: pointer;
+            background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+            border: 2px solid var(--border);
+            border-radius: var(--radius);
+            padding: 2rem 1.5rem;
+            transition: all 0.2s;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .flashcard:active { border-color: var(--primary); background: #eff6ff; }
+        .flashcard-front { font-size: 1.15rem; font-weight: 600; line-height: 1.4; }
+        .flashcard-back { font-size: 1.05rem; color: var(--primary); font-weight: 600; line-height: 1.4; }
+        .flashcard-controls {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 0.75rem;
+        }
+        .flashcard-controls .btn { flex: 1; }
+        .flashcard-counter {
+            text-align: center;
+            font-size: 0.78rem;
+            color: var(--text-light);
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 0.75rem 1.25rem;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 0.88rem;
+            font-weight: 600;
+            text-align: center;
+            -webkit-tap-highlight-color: transparent;
+            transition: all 0.15s;
+            min-height: 44px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .btn:active { transform: scale(0.97); }
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-primary:active { background: var(--primary-dark); }
+        .btn-secondary { background: #f1f5f9; color: var(--text); }
+        .btn-secondary:active { background: #e2e8f0; }
+        .btn-success { background: var(--success); color: white; }
+        .btn-full { width: 100%; }
+        .btn-sm { padding: 0.5rem 0.75rem; font-size: 0.8rem; min-height: 36px; border-radius: 8px; }
+
+        /* Topic detail view */
+        .question-list { list-style: none; padding: 0; }
+        .question-item {
+            padding: 0.85rem 0;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+        .question-item:last-child { border-bottom: none; }
+
+        /* Collapsible */
+        .collapse-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.85rem 0;
+            cursor: pointer;
+            border-bottom: 1px solid var(--border);
+            -webkit-tap-highlight-color: transparent;
+        }
+        .collapse-header:last-of-type { border-bottom: none; }
+        .collapse-header .title { font-weight: 600; font-size: 0.9rem; }
+        .collapse-header .arrow { color: var(--text-light); transition: transform 0.2s; font-size: 0.8rem; }
+        .collapse-header.open .arrow { transform: rotate(90deg); }
+        .collapse-content { display: none; padding: 0.5rem 0 1rem; }
+        .collapse-content.show { display: block; }
+
+        /* Progress indicator */
+        .progress-bar {
+            width: 100%;
+            height: 4px;
+            background: var(--border);
+            border-radius: 2px;
+            overflow: hidden;
+            margin: 0.75rem 0;
+        }
+        .progress-fill {
+            height: 100%;
+            background: var(--primary);
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Quiz styling */
+        .quiz-question {
+            font-size: 1.05rem;
+            font-weight: 600;
+            margin-bottom: 1.25rem;
+            line-height: 1.5;
+        }
+        .quiz-options { display: flex; flex-direction: column; gap: 0.6rem; }
+        .quiz-option {
+            padding: 0.9rem 1rem;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            min-height: 48px;
+            display: flex;
+            align-items: center;
+            transition: all 0.15s;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .quiz-option:active { border-color: var(--primary); background: #eff6ff; }
+        .quiz-option.correct { border-color: var(--success); background: #ecfdf5; }
+        .quiz-option.incorrect { border-color: var(--error); background: #fef2f2; }
+        .quiz-option.disabled { pointer-events: none; opacity: 0.7; }
+
+        /* Score display */
+        .score-display {
+            text-align: center;
+            padding: 2rem 1rem;
+        }
+        .score-display .score-num {
+            font-size: 3.5rem;
+            font-weight: 800;
+            letter-spacing: -0.03em;
+        }
+        .score-display .score-label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-top: 0.25rem;
+        }
+
+        /* Back button */
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.4rem 0;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--primary);
+            background: none;
+            border: none;
+            cursor: pointer;
+            margin-bottom: 0.75rem;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* Bottom navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--card);
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: space-around;
+            padding: 0.5rem 0 calc(0.5rem + var(--safe-bottom));
+            z-index: 100;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.04);
+        }
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.2rem;
+            background: none;
+            border: none;
+            color: var(--text-light);
+            font-size: 0.6rem;
+            font-weight: 600;
+            padding: 0.3rem 0.75rem;
+            border-radius: 8px;
+            cursor: pointer;
+            -webkit-tap-highlight-color: transparent;
+            transition: color 0.15s;
+        }
+        .nav-item.active { color: var(--primary); }
+        .nav-item .nav-icon { font-size: 1.4rem; line-height: 1; }
+
+        /* Exam info cards */
+        .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin: 0.75rem 0; }
+        .info-box {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 0.85rem;
+            text-align: center;
+            border: 1px solid var(--border);
+        }
+        .info-box .info-val { font-size: 1.3rem; font-weight: 700; color: var(--primary); }
+        .info-box .info-label { font-size: 0.7rem; color: var(--text-secondary); margin-top: 0.15rem; }
+
+        /* Tips */
+        .tip-item {
+            display: flex;
+            gap: 0.6rem;
+            padding: 0.6rem 0;
+            align-items: flex-start;
+        }
+        .tip-icon { font-size: 1rem; line-height: 1; flex-shrink: 0; margin-top: 0.1rem; }
+        .tip-text { font-size: 0.85rem; color: var(--text-secondary); line-height: 1.5; }
+
+        /* Responsive */
+        @media (min-width: 768px) {
+            .container { padding: 1.5rem 2rem; }
+            .card { padding: 1.75rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-top">
+            <div>
+                <h1>Sproochentest</h1>
+                <div class="subtitle">Luxembourg Language Test Prep</div>
+            </div>
+            <span class="badge">A2 / B1</span>
+        </div>
+    </div>
+    <div class="container" id="app"></div>
+    <div class="bottom-nav">
+        <button class="nav-item" onclick="showView('home')" id="nav-home"><span class="nav-icon">&#127968;</span>Home</button>
+        <button class="nav-item" onclick="showView('topics')" id="nav-topics"><span class="nav-icon">&#128172;</span>Topics</button>
+        <button class="nav-item" onclick="showView('vocab')" id="nav-vocab"><span class="nav-icon">&#128218;</span>Vocab</button>
+        <button class="nav-item" onclick="showView('phrases')" id="nav-phrases"><span class="nav-icon">&#128161;</span>Phrases</button>
+        <button class="nav-item" onclick="showView('practice')" id="nav-practice"><span class="nav-icon">&#9889;</span>Practice</button>
+    </div>
+
+    <script src="data.js"></script>
+    <script>
+let currentView = 'home';
+let viewState = {};
+let flashcardState = { current: 0, flipped: false, deck: [] };
+
+function showView(view, state) {
+    currentView = view;
+    if (state) viewState = state;
+    document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+    const navMap = { home: 'nav-home', topics: 'nav-topics', topicDetail: 'nav-topics', vocab: 'nav-vocab', phrases: 'nav-phrases', practice: 'nav-practice', quiz: 'nav-practice', quizActive: 'nav-practice' };
+    const btn = document.getElementById(navMap[view] || 'nav-home');
+    if (btn) btn.classList.add('active');
+    render();
+    window.scrollTo(0, 0);
+}
+
+function render() {
+    const app = document.getElementById('app');
+    switch(currentView) {
+        case 'home': app.innerHTML = renderHome(); break;
+        case 'topics': app.innerHTML = renderTopics(); break;
+        case 'topicDetail': app.innerHTML = renderTopicDetail(); break;
+        case 'vocab': app.innerHTML = renderVocab(); break;
+        case 'phrases': app.innerHTML = renderPhrases(); break;
+        case 'practice': app.innerHTML = renderPractice(); break;
+        case 'quiz': app.innerHTML = renderQuizSetup(); break;
+        case 'quizActive': app.innerHTML = renderQuiz(); break;
+    }
+}
+
+// === HOME ===
+function renderHome() {
+    const info = appData.examInfo;
+    let html = `
+        <div class="card">
+            <h2>About the Test</h2>
+            <p>${info.format}</p>
+            <div class="info-grid">
+                <div class="info-box"><div class="info-val">A2</div><div class="info-label">Speaking Level</div></div>
+                <div class="info-box"><div class="info-val">B1</div><div class="info-label">Listening Level</div></div>
+                <div class="info-box"><div class="info-val">50%</div><div class="info-label">Pass Mark</div></div>
+                <div class="info-box"><div class="info-val">~70%</div><div class="info-label">Pass Rate</div></div>
+            </div>
+        </div>
+        <div class="card">
+            <h2>Test Structure</h2>`;
+    info.sections.forEach(s => {
+        html += `<h3>${s.name} <span style="color:var(--primary);font-size:0.8rem">(${s.level} • ${s.duration})</span></h3><ul>`;
+        s.parts.forEach(p => html += `<li>${p}</li>`);
+        html += `</ul>`;
+    });
+    html += `</div>
+        <div class="card">
+            <h2>Key Tips</h2>`;
+    const icons = ['⚠️', '❌', '❌', '⏰', '\u{1F3A4}', '♻️', '\u{1F4F7}', '\u{1F4DD}'];
+    info.tips.forEach((tip, i) => {
+        html += `<div class="tip-item"><span class="tip-icon">${icons[i] || '✔️'}</span><span class="tip-text">${tip}</span></div>`;
+    });
+    html += `</div>
+        <div class="card">
+            <h2>Logistics</h2>
+            <ul>
+                <li><b>Cost:</b> ${info.logistics.cost}</li>
+                <li><b>Where:</b> ${info.logistics.locations}</li>
+                <li><b>Register:</b> ${info.logistics.registration}</li>
+                <li><b>Results:</b> ${info.logistics.results}</li>
+                <li><b>ID:</b> ${info.logistics.id}</li>
+            </ul>
+        </div>`;
+    return html;
+}
+
+// === TOPICS ===
+function renderTopics() {
+    let html = `<p class="section-label">21 Official Speaking Topics</p><div class="card"><p style="margin-bottom:0.75rem">You'll choose 1 of 2 random topics. Tap any topic to see practice questions.</p><div class="topic-grid">`;
+    appData.topics.forEach(t => {
+        html += `<div class="topic-pill" onclick="showView('topicDetail', {topicId: ${t.id}})">${t.name}</div>`;
+    });
+    html += `</div></div>
+        <div class="card">
+            <h2>Picture Description Framework</h2>
+            <p style="margin-bottom:0.75rem">Use these 7 steps to fill 5 minutes:</p>`;
+    appData.pictureFramework.forEach(s => {
+        html += `<div class="phrase-item"><span class="phrase-lux">${s.step}. ${s.lux}</span><span class="phrase-en">${s.en}</span></div>`;
+    });
+    html += `</div>
+        <div class="card">
+            <h2>Sentence Patterns</h2>
+            <p style="margin-bottom:0.75rem">Master these 6 patterns — they cover most situations:</p>`;
+    appData.sentencePatterns.forEach(sp => {
+        html += `<div style="padding:0.75rem 0;border-bottom:1px solid var(--border)"><div class="phrase-lux">${sp.pattern}</div><div class="phrase-en">${sp.meaning}</div><div style="margin-top:0.3rem;font-size:0.8rem;color:var(--text-light)">${sp.examples.join(' • ')}</div></div>`;
+    });
+    html += `</div>`;
+    return html;
+}
+
+function renderTopicDetail() {
+    const topic = appData.topics.find(t => t.id === viewState.topicId);
+    const questions = appData.topicQuestions[topic.id] || [];
+    let html = `<button class="back-btn" onclick="showView('topics')">← All Topics</button>
+        <div class="card">
+            <h2>${topic.name}</h2>
+            <p style="margin-bottom:0.5rem;color:var(--text-secondary)">${topic.nameEn} • ${questions.length} practice questions</p>
+            <ol class="question-list" style="padding-left:1.25rem">`;
+    questions.forEach(q => html += `<li class="question-item">${q}</li>`);
+    html += `</ol></div>
+        <div class="card" style="background:#fffbeb;border-color:#fde68a">
+            <h3 style="color:#92400e">\u{1F4A1} Tip</h3>
+            <p style="color:#78350f">Prepare 2-3 sentences for each question. The same stories about your life work across multiple topics!</p>
+        </div>`;
+    return html;
+}
+
+// === VOCABULARY ===
+function renderVocab() {
+    const cats = [...new Set(appData.vocabulary.map(v => v.cat))];
+    let html = `<p class="section-label">Vocabulary by Category</p>
+        <div style="display:flex;gap:0.5rem;margin-bottom:1rem;flex-wrap:wrap">
+            <button class="btn btn-sm btn-primary" onclick="startFlashcards('all')">Flashcards (All)</button>
+        </div>`;
+    cats.forEach(cat => {
+        const words = appData.vocabulary.filter(v => v.cat === cat);
+        html += `<div class="card">
+            <div class="collapse-header" onclick="toggleCollapse(this)">
+                <span class="title">${cat} (${words.length})</span>
+                <span class="arrow">▶</span>
+            </div>
+            <div class="collapse-content">`;
+        words.forEach(w => html += `<div class="phrase-item"><span class="phrase-lux">${w.lux}</span><span class="phrase-en">${w.en}</span></div>`);
+        html += `<button class="btn btn-sm btn-secondary" style="margin-top:0.5rem" onclick="startFlashcards('${cat}')">Practice ${cat} Flashcards</button></div></div>`;
+    });
+    return html;
+}
+
+function toggleCollapse(el) {
+    el.classList.toggle('open');
+    const content = el.nextElementSibling;
+    content.classList.toggle('show');
+}
+
+function startFlashcards(cat) {
+    const deck = cat === 'all' ? [...appData.vocabulary] : appData.vocabulary.filter(v => v.cat === cat);
+    for (let i = deck.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [deck[i], deck[j]] = [deck[j], deck[i]]; }
+    flashcardState = { current: 0, flipped: false, deck };
+    currentView = 'flashcardView';
+    render();
+}
+
+// === PHRASES ===
+function renderPhrases() {
+    let html = `<p class="section-label">Essential Phrases for the Exam</p>`;
+    for (const [category, phrases] of Object.entries(appData.usefulPhrases)) {
+        html += `<div class="card"><h2>${category}</h2>`;
+        phrases.forEach(p => html += `<div class="phrase-item"><span class="phrase-lux">${p.lux}</span><span class="phrase-en">${p.en}</span></div>`);
+        html += `</div>`;
+    }
+    html += `<p class="section-label">Grammar Essentials</p>`;
+    appData.grammar.forEach(g => {
+        html += `<div class="card"><div class="collapse-header" onclick="toggleCollapse(this)"><span class="title">${g.title}</span><span class="arrow">▶</span></div><div class="collapse-content">${g.content}</div></div>`;
+    });
+    return html;
+}
+
+// === PRACTICE ===
+function renderPractice() {
+    let html = `<p class="section-label">Practice</p>
+        <div class="card">
+            <h2>Vocabulary Quiz</h2>
+            <p style="margin-bottom:1rem">Test your vocabulary with multiple choice.</p>
+            <button class="btn btn-primary btn-full" onclick="startQuiz()">Start Quiz (20 Questions)</button>
+        </div>
+        <div class="card">
+            <h2>Flashcards</h2>
+            <p style="margin-bottom:1rem">Flip through vocabulary cards.</p>
+            <button class="btn btn-primary btn-full" onclick="startFlashcards('all')">Start Flashcards</button>
+        </div>
+        <div class="card">
+            <h2>Random Topic Generator</h2>
+            <p style="margin-bottom:1rem">Simulate the exam: get 2 random topics, pick one, and practice answering.</p>
+            <button class="btn btn-primary btn-full" onclick="randomTopics()">Generate 2 Random Topics</button>
+            <div id="random-topics"></div>
+        </div>`;
+    return html;
+}
+
+function randomTopics() {
+    const shuffled = [...appData.topics].sort(() => Math.random() - 0.5);
+    const t1 = shuffled[0], t2 = shuffled[1];
+    const el = document.getElementById('random-topics');
+    el.innerHTML = `<div style="margin-top:1rem;padding:1rem;background:#f8fafc;border-radius:12px;border:1px solid var(--border)">
+        <p style="font-weight:600;margin-bottom:0.75rem">Your 2 topics:</p>
+        <div class="topic-pill active" onclick="showView('topicDetail', {topicId:${t1.id}})" style="display:inline-block;margin:0.25rem">${t1.name}</div>
+        <div class="topic-pill active" onclick="showView('topicDetail', {topicId:${t2.id}})" style="display:inline-block;margin:0.25rem">${t2.name}</div>
+        <p style="font-size:0.8rem;color:var(--text-secondary);margin-top:0.75rem">Pick one and practice answering for 5 minutes!</p>
+    </div>`;
+}
+
+// === QUIZ ===
+let quizState = { questions: [], current: 0, score: 0, answered: false };
+
+function startQuiz() {
+    const vocab = [...appData.vocabulary].sort(() => Math.random() - 0.5);
+    const qs = [];
+    for (let i = 0; i < Math.min(20, vocab.length); i++) {
+        const correct = vocab[i];
+        const wrongs = appData.vocabulary.filter(v => v.cat === correct.cat && v.lux !== correct.lux).sort(() => Math.random() - 0.5).slice(0, 3);
+        if (wrongs.length < 3) {
+            const extra = appData.vocabulary.filter(v => v.lux !== correct.lux && !wrongs.includes(v)).sort(() => Math.random() - 0.5);
+            while (wrongs.length < 3) wrongs.push(extra.shift());
+        }
+        const options = [correct.en, ...wrongs.map(w => w.en)].sort(() => Math.random() - 0.5);
+        qs.push({ q: correct.lux, correctAnswer: correct.en, options });
+    }
+    quizState = { questions: qs, current: 0, score: 0, answered: false };
+    currentView = 'quizActive';
+    render();
+}
+
+function renderQuiz() {
+    const { questions: qs, current, score, answered } = quizState;
+    if (current >= qs.length) return renderQuizResults();
+    const q = qs[current];
+    const progress = (current / qs.length * 100).toFixed(0);
+    let html = `<div class="card">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.5rem">
+            <span style="font-size:0.8rem;color:var(--text-secondary)">${current + 1} / ${qs.length}</span>
+            <span style="font-size:0.8rem;color:var(--text-secondary)">${score} correct</span>
+        </div>
+        <div class="progress-bar"><div class="progress-fill" style="width:${progress}%"></div></div>
+        <p class="quiz-question">What does this mean?<br><span style="color:var(--primary)">${q.q}</span></p>
+        <div class="quiz-options">`;
+    q.options.forEach((opt, i) => {
+        let cls = 'quiz-option';
+        if (answered) {
+            cls += ' disabled';
+            if (opt === q.correctAnswer) cls += ' correct';
+            else if (opt === quizState.selected && opt !== q.correctAnswer) cls += ' incorrect';
+        }
+        html += `<div class="${cls}" onclick="selectQuizAnswer('${opt.replace(/'/g, "\\'")}')">${opt}</div>`;
+    });
+    html += `</div>`;
+    if (answered) {
+        html += `<div style="margin-top:1.25rem"><button class="btn btn-primary btn-full" onclick="nextQuizQuestion()">Next →</button></div>`;
+    }
+    html += `</div>`;
+    return html;
+}
+
+function selectQuizAnswer(ans) {
+    if (quizState.answered) return;
+    quizState.answered = true;
+    quizState.selected = ans;
+    if (ans === quizState.questions[quizState.current].correctAnswer) quizState.score++;
+    render();
+}
+
+function nextQuizQuestion() {
+    quizState.current++;
+    quizState.answered = false;
+    quizState.selected = null;
+    render();
+}
+
+function renderQuizResults() {
+    const { questions: qs, score } = quizState;
+    const pct = Math.round(score / qs.length * 100);
+    const passed = pct >= 50;
+    return `<div class="card score-display">
+        <div class="score-num" style="color:${passed ? 'var(--success)' : 'var(--error)'}">${pct}%</div>
+        <div class="score-label">${score} / ${qs.length} correct</div>
+        <p style="margin-top:1rem;font-size:1.1rem;font-weight:600;color:${passed ? 'var(--success)' : 'var(--error)'}">${passed ? 'GUTT GEMAACH! \u{1F389}' : 'WEIDER ÜBEN! \u{1F4AA}'}</p>
+        <div style="margin-top:1.5rem;display:flex;gap:0.75rem;flex-direction:column">
+            <button class="btn btn-primary btn-full" onclick="startQuiz()">Try Again</button>
+            <button class="btn btn-secondary btn-full" onclick="showView('vocab')">Review Vocabulary</button>
+        </div>
+    </div>`;
+}
+
+// === FLASHCARD VIEW (injected into render) ===
+function renderFlashcardView() {
+    const { deck, current, flipped } = flashcardState;
+    if (!deck.length) return '<div class="card"><p>No cards available.</p></div>';
+    const card = deck[current];
+    return `<div class="card">
+        <button class="back-btn" onclick="showView('vocab')">← Back</button>
+        <div class="flashcard-counter">${current + 1} / ${deck.length}</div>
+        <div class="progress-bar"><div class="progress-fill" style="width:${((current + 1) / deck.length * 100).toFixed(0)}%"></div></div>
+        <div class="flashcard-container">
+            <div class="flashcard" onclick="flipCard()">
+                ${flipped
+                    ? `<div class="flashcard-back">${card.en}</div>`
+                    : `<div class="flashcard-front">${card.lux}</div>`}
+            </div>
+        </div>
+        <p style="text-align:center;font-size:0.75rem;color:var(--text-light);margin:0.5rem 0">Tap to flip</p>
+        <div class="flashcard-controls">
+            <button class="btn btn-secondary btn-sm" onclick="prevCard()">←</button>
+            <button class="btn btn-secondary btn-sm" onclick="shuffleDeck()">Shuffle</button>
+            <button class="btn btn-primary btn-sm" onclick="nextCard()">→</button>
+        </div>
+    </div>`;
+}
+
+function flipCard() { flashcardState.flipped = !flashcardState.flipped; render(); }
+function nextCard() { flashcardState.current = (flashcardState.current + 1) % flashcardState.deck.length; flashcardState.flipped = false; render(); }
+function prevCard() { flashcardState.current = (flashcardState.current - 1 + flashcardState.deck.length) % flashcardState.deck.length; flashcardState.flipped = false; render(); }
+function shuffleDeck() {
+    const d = flashcardState.deck;
+    for (let i = d.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [d[i], d[j]] = [d[j], d[i]]; }
+    flashcardState.current = 0; flashcardState.flipped = false; render();
+}
+
+// Patch render for flashcard view
+const _origRender = render;
+render = function() {
+    if (currentView === 'flashcardView') {
+        document.getElementById('app').innerHTML = renderFlashcardView();
+        return;
+    }
+    _origRender();
+};
+
+// Swipe support for flashcards
+let touchStartX = 0;
+document.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].screenX; }, {passive: true});
+document.addEventListener('touchend', e => {
+    const dx = e.changedTouches[0].screenX - touchStartX;
+    if (Math.abs(dx) > 80 && currentView === 'flashcardView') {
+        if (dx < 0) nextCard(); else prevCard();
+    }
+}, {passive: true});
+
+showView('home');
+    </script>
+</body>
+</html>
