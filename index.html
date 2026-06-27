@@ -5,24 +5,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="theme-color" content="#1e293b">
+    <meta name="theme-color" content="#0f0a1e">
     <title>Sproochentest Prep</title>
     <style>
         :root {
-            --primary: #3b82f6;
-            --primary-dark: #2563eb;
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --primary-light: #818cf8;
+            --primary-glow: rgba(99, 102, 241, 0.12);
             --accent: #f59e0b;
-            --bg: #f8fafc;
+            --accent-glow: rgba(245, 158, 11, 0.25);
+            --bg: #fafafd;
             --card: #ffffff;
-            --text: #1e293b;
-            --text-secondary: #64748b;
-            --text-light: #94a3b8;
+            --text: #1a1a2e;
+            --text-secondary: #5a5a7a;
+            --text-light: #9a9ab0;
             --success: #10b981;
             --error: #ef4444;
-            --border: #e2e8f0;
-            --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.04);
-            --shadow-lg: 0 4px 6px rgba(0,0,0,0.07), 0 2px 4px rgba(0,0,0,0.05);
-            --radius: 16px;
+            --border: #eae8f0;
+            --shadow: 0 2px 12px rgba(15, 10, 30, 0.05);
+            --shadow-lg: 0 8px 30px rgba(15, 10, 30, 0.08);
+            --radius: 20px;
+            --radius-sm: 14px;
             --safe-bottom: env(safe-area-inset-bottom, 0px);
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -35,318 +39,422 @@
             min-height: 100%;
             -webkit-text-size-adjust: 100%;
             -webkit-tap-highlight-color: transparent;
-            padding-bottom: calc(5rem + var(--safe-bottom));
+            padding-bottom: calc(5.5rem + var(--safe-bottom));
         }
 
-        /* Header */
+        #app { animation: viewIn 0.35s cubic-bezier(0.22, 1, 0.36, 1); }
+        @keyframes viewIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
         .header {
-            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            background: linear-gradient(150deg, #0f0a1e 0%, #1e1145 50%, #2d1b69 100%);
             color: white;
-            padding: 1.25rem 1.25rem 1rem;
+            padding: 1.4rem 1.4rem 1.15rem;
             position: sticky;
             top: 0;
             z-index: 50;
+            box-shadow: 0 4px 24px rgba(15, 10, 30, 0.35);
+        }
+        .header::after {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--primary-light), transparent);
+            opacity: 0.5;
         }
         .header-top { display: flex; justify-content: space-between; align-items: center; }
-        .header h1 { font-size: 1.2rem; font-weight: 700; letter-spacing: -0.02em; }
-        .header .subtitle { font-size: 0.75rem; color: #94a3b8; margin-top: 0.15rem; }
+        .header h1 {
+            font-size: 1.35rem;
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            background: linear-gradient(135deg, #fff 0%, #c7d2fe 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .header .subtitle {
+            font-size: 0.76rem;
+            color: rgba(167, 139, 250, 0.75);
+            margin-top: 0.15rem;
+            font-weight: 500;
+            letter-spacing: 0.02em;
+        }
         .header .badge {
-            background: var(--accent);
+            background: linear-gradient(135deg, var(--accent), #f97316);
             color: #1e293b;
-            padding: 0.2rem 0.6rem;
+            padding: 0.28rem 0.7rem;
             border-radius: 2rem;
-            font-size: 0.65rem;
-            font-weight: 700;
+            font-size: 0.66rem;
+            font-weight: 800;
             text-transform: uppercase;
-            letter-spacing: 0.05em;
+            letter-spacing: 0.06em;
+            box-shadow: 0 2px 10px var(--accent-glow);
         }
 
-        /* Container */
-        .container { padding: 1rem; max-width: 600px; margin: 0 auto; }
+        .container { padding: 1.15rem; max-width: 600px; margin: 0 auto; }
 
-        /* Cards */
         .card {
             background: var(--card);
             border-radius: var(--radius);
-            padding: 1.25rem;
-            margin-bottom: 1rem;
+            padding: 1.4rem;
+            margin-bottom: 1.1rem;
             box-shadow: var(--shadow);
             border: 1px solid var(--border);
-            transition: transform 0.15s, box-shadow 0.15s;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.2s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.2s;
+            animation: cardUp 0.4s cubic-bezier(0.22, 1, 0.36, 1) backwards;
         }
-        .card:active { transform: scale(0.99); }
-        .card h2 {
-            font-size: 1.1rem;
-            font-weight: 700;
-            margin-bottom: 0.75rem;
-            color: var(--text);
-            letter-spacing: -0.01em;
+        .card:nth-child(1) { animation-delay: 0.04s; }
+        .card:nth-child(2) { animation-delay: 0.08s; }
+        .card:nth-child(3) { animation-delay: 0.12s; }
+        .card:nth-child(4) { animation-delay: 0.16s; }
+        @keyframes cardUp {
+            from { opacity: 0; transform: translateY(18px); }
+            to { opacity: 1; transform: translateY(0); }
         }
-        .card h3 { font-size: 0.95rem; font-weight: 600; margin: 0.75rem 0 0.5rem; }
-        .card p { font-size: 0.88rem; color: var(--text-secondary); line-height: 1.6; }
-        .card ul { padding-left: 1.25rem; margin: 0.5rem 0; }
-        .card li { font-size: 0.88rem; margin-bottom: 0.35rem; color: var(--text-secondary); }
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--primary-light), var(--accent));
+            opacity: 0;
+            transition: opacity 0.25s;
+        }
+        .card:active { transform: scale(0.985); box-shadow: var(--shadow-lg); }
+        .card:active::before { opacity: 1; }
+        .card h2 { font-size: 1.15rem; font-weight: 800; margin-bottom: 0.8rem; letter-spacing: -0.02em; }
+        .card h3 { font-size: 0.98rem; font-weight: 700; margin: 0.8rem 0 0.5rem; }
+        .card p { font-size: 0.9rem; color: var(--text-secondary); line-height: 1.7; }
+        .card ul { padding-left: 1.2rem; margin: 0.5rem 0; }
+        .card li { font-size: 0.88rem; margin-bottom: 0.35rem; color: var(--text-secondary); line-height: 1.6; }
         .card table { width: 100%; border-collapse: collapse; font-size: 0.82rem; margin: 0.5rem 0; }
-        .card th, .card td { padding: 0.4rem 0.5rem; border: 1px solid var(--border); text-align: left; }
-        .card th { background: #f1f5f9; font-weight: 600; }
+        .card th, .card td { padding: 0.45rem 0.55rem; border: 1px solid var(--border); text-align: left; }
+        .card th { background: #f5f3ff; font-weight: 600; color: var(--primary-dark); }
 
-        /* Section titles */
         .section-label {
             font-size: 0.7rem;
-            font-weight: 700;
+            font-weight: 800;
             text-transform: uppercase;
-            letter-spacing: 0.08em;
+            letter-spacing: 0.1em;
             color: var(--text-light);
-            margin: 1.25rem 0 0.5rem;
-            padding-left: 0.25rem;
+            margin: 1.4rem 0 0.6rem;
+            padding-left: 0.2rem;
         }
 
-        /* Topic pills */
         .topic-grid { display: flex; flex-wrap: wrap; gap: 0.5rem; }
         .topic-pill {
-            padding: 0.5rem 0.9rem;
+            padding: 0.55rem 0.95rem;
             border-radius: 2rem;
             font-size: 0.8rem;
-            font-weight: 500;
-            background: #f1f5f9;
-            color: var(--text);
-            border: 1px solid var(--border);
+            font-weight: 600;
+            background: linear-gradient(135deg, #f5f3ff, #ede9fe);
+            color: var(--primary-dark);
+            border: 1px solid rgba(99, 102, 241, 0.12);
             cursor: pointer;
-            transition: all 0.15s;
+            transition: all 0.2s cubic-bezier(0.22, 1, 0.36, 1);
             -webkit-tap-highlight-color: transparent;
         }
         .topic-pill:active, .topic-pill.active {
-            background: var(--primary);
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
             color: white;
             border-color: var(--primary);
+            box-shadow: 0 4px 14px rgba(99, 102, 241, 0.3);
+            transform: scale(0.94);
         }
 
-        /* Phrase list */
         .phrase-item {
-            padding: 0.75rem 0;
+            padding: 0.8rem 0;
             border-bottom: 1px solid var(--border);
             display: flex;
             flex-direction: column;
             gap: 0.2rem;
         }
         .phrase-item:last-child { border-bottom: none; }
-        .phrase-lux { font-weight: 600; font-size: 0.92rem; color: var(--text); }
-        .phrase-en { font-size: 0.82rem; color: var(--text-secondary); }
+        .phrase-lux { font-weight: 700; font-size: 0.93rem; color: var(--text); }
+        .phrase-en { font-size: 0.82rem; color: var(--text-secondary); font-style: italic; }
 
-        /* Flashcard */
-        .flashcard-container { perspective: 1000px; margin: 0.75rem 0; }
+        .flashcard-container { perspective: 1200px; margin: 0.85rem 0; }
         .flashcard {
-            min-height: 200px;
+            min-height: 210px;
             display: flex;
             align-items: center;
             justify-content: center;
             text-align: center;
             cursor: pointer;
-            background: linear-gradient(135deg, #f8fafc, #f1f5f9);
-            border: 2px solid var(--border);
+            background: linear-gradient(150deg, #f8f7ff 0%, #eee8ff 50%, #e4dcff 100%);
+            border: 2px solid rgba(99, 102, 241, 0.12);
             border-radius: var(--radius);
-            padding: 2rem 1.5rem;
-            transition: all 0.2s;
+            padding: 2.25rem 1.75rem;
+            transition: all 0.35s cubic-bezier(0.22, 1, 0.36, 1);
             -webkit-tap-highlight-color: transparent;
+            transform-style: preserve-3d;
+            box-shadow: 0 6px 20px rgba(99, 102, 241, 0.06);
         }
-        .flashcard:active { border-color: var(--primary); background: #eff6ff; }
-        .flashcard-front { font-size: 1.15rem; font-weight: 600; line-height: 1.4; }
-        .flashcard-back { font-size: 1.05rem; color: var(--primary); font-weight: 600; line-height: 1.4; }
-        .flashcard-controls {
-            display: flex;
-            gap: 0.5rem;
-            margin-top: 0.75rem;
+        .flashcard:active {
+            transform: rotateY(5deg) scale(0.98);
+            border-color: var(--primary);
+            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.14);
         }
+        .flashcard-front { font-size: 1.25rem; font-weight: 700; line-height: 1.4; }
+        .flashcard-back { font-size: 1.15rem; color: var(--primary); font-weight: 700; line-height: 1.4; }
+        .flashcard-controls { display: flex; gap: 0.55rem; margin-top: 0.85rem; }
         .flashcard-controls .btn { flex: 1; }
         .flashcard-counter {
             text-align: center;
-            font-size: 0.78rem;
+            font-size: 0.8rem;
             color: var(--text-light);
             margin-bottom: 0.5rem;
-            font-weight: 500;
+            font-weight: 600;
         }
 
-        /* Buttons */
         .btn {
-            padding: 0.75rem 1.25rem;
+            padding: 0.8rem 1.25rem;
             border: none;
-            border-radius: 12px;
+            border-radius: var(--radius-sm);
             cursor: pointer;
             font-size: 0.88rem;
-            font-weight: 600;
+            font-weight: 700;
             text-align: center;
             -webkit-tap-highlight-color: transparent;
-            transition: all 0.15s;
-            min-height: 44px;
+            transition: all 0.2s cubic-bezier(0.22, 1, 0.36, 1);
+            min-height: 46px;
             display: inline-flex;
             align-items: center;
             justify-content: center;
         }
-        .btn:active { transform: scale(0.97); }
-        .btn-primary { background: var(--primary); color: white; }
-        .btn-primary:active { background: var(--primary-dark); }
-        .btn-secondary { background: #f1f5f9; color: var(--text); }
-        .btn-secondary:active { background: #e2e8f0; }
-        .btn-success { background: var(--success); color: white; }
+        .btn:active { transform: scale(0.96); }
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            box-shadow: 0 4px 14px rgba(99, 102, 241, 0.25);
+        }
+        .btn-primary:active { box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3); }
+        .btn-secondary {
+            background: linear-gradient(135deg, #f5f3ff, #ede9fe);
+            color: var(--primary-dark);
+            border: 1px solid rgba(99, 102, 241, 0.1);
+        }
+        .btn-success { background: linear-gradient(135deg, var(--success), #059669); color: white; }
         .btn-full { width: 100%; }
-        .btn-sm { padding: 0.5rem 0.75rem; font-size: 0.8rem; min-height: 36px; border-radius: 8px; }
+        .btn-sm { padding: 0.55rem 0.8rem; font-size: 0.8rem; min-height: 38px; border-radius: 10px; }
 
-        /* Topic detail view */
         .question-list { list-style: none; padding: 0; }
         .question-item {
-            padding: 0.85rem 0;
+            padding: 0.9rem 0;
             border-bottom: 1px solid var(--border);
             font-size: 0.9rem;
-            line-height: 1.5;
+            line-height: 1.55;
         }
         .question-item:last-child { border-bottom: none; }
 
-        /* Collapsible */
         .collapse-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 0.85rem 0;
+            padding: 0.9rem 0;
             cursor: pointer;
             border-bottom: 1px solid var(--border);
             -webkit-tap-highlight-color: transparent;
         }
         .collapse-header:last-of-type { border-bottom: none; }
-        .collapse-header .title { font-weight: 600; font-size: 0.9rem; }
-        .collapse-header .arrow { color: var(--text-light); transition: transform 0.2s; font-size: 0.8rem; }
+        .collapse-header .title { font-weight: 700; font-size: 0.92rem; }
+        .collapse-header .arrow {
+            color: var(--primary-light);
+            transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+            font-size: 0.75rem;
+            width: 26px; height: 26px;
+            display: flex; align-items: center; justify-content: center;
+            background: var(--primary-glow);
+            border-radius: 50%;
+        }
         .collapse-header.open .arrow { transform: rotate(90deg); }
-        .collapse-content { display: none; padding: 0.5rem 0 1rem; }
+        .collapse-content {
+            display: none;
+            padding: 0.5rem 0 0.9rem;
+            animation: fadeSlide 0.3s ease;
+        }
         .collapse-content.show { display: block; }
+        @keyframes fadeSlide {
+            from { opacity: 0; transform: translateY(-6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
-        /* Progress indicator */
         .progress-bar {
             width: 100%;
-            height: 4px;
+            height: 5px;
             background: var(--border);
-            border-radius: 2px;
+            border-radius: 3px;
             overflow: hidden;
-            margin: 0.75rem 0;
+            margin: 0.8rem 0;
         }
         .progress-fill {
             height: 100%;
-            background: var(--primary);
-            border-radius: 2px;
-            transition: width 0.3s ease;
+            background: linear-gradient(90deg, var(--primary), var(--primary-light));
+            border-radius: 3px;
+            transition: width 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+            position: relative;
+        }
+        .progress-fill::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.35), transparent);
+            animation: shimmer 2.5s infinite;
+        }
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
         }
 
-        /* Quiz styling */
         .quiz-question {
-            font-size: 1.05rem;
-            font-weight: 600;
-            margin-bottom: 1.25rem;
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 1.3rem;
             line-height: 1.5;
+            letter-spacing: -0.015em;
         }
-        .quiz-options { display: flex; flex-direction: column; gap: 0.6rem; }
+        .quiz-options { display: flex; flex-direction: column; gap: 0.65rem; }
         .quiz-option {
-            padding: 0.9rem 1rem;
+            padding: 0.95rem 1.1rem;
             border: 2px solid var(--border);
-            border-radius: 12px;
+            border-radius: var(--radius-sm);
             cursor: pointer;
             font-size: 0.9rem;
-            min-height: 48px;
+            font-weight: 500;
+            min-height: 50px;
             display: flex;
             align-items: center;
-            transition: all 0.15s;
+            transition: all 0.2s cubic-bezier(0.22, 1, 0.36, 1);
             -webkit-tap-highlight-color: transparent;
         }
-        .quiz-option:active { border-color: var(--primary); background: #eff6ff; }
-        .quiz-option.correct { border-color: var(--success); background: #ecfdf5; }
-        .quiz-option.incorrect { border-color: var(--error); background: #fef2f2; }
-        .quiz-option.disabled { pointer-events: none; opacity: 0.7; }
-
-        /* Score display */
-        .score-display {
-            text-align: center;
-            padding: 2rem 1rem;
+        .quiz-option:active { border-color: var(--primary); background: var(--primary-glow); transform: scale(0.98); }
+        .quiz-option.correct {
+            border-color: var(--success);
+            background: #ecfdf5;
+            box-shadow: 0 3px 12px rgba(16, 185, 129, 0.12);
+            animation: pulse 0.35s ease;
         }
+        .quiz-option.incorrect {
+            border-color: var(--error);
+            background: #fef2f2;
+            animation: shake 0.35s ease;
+        }
+        .quiz-option.disabled { pointer-events: none; opacity: 0.6; }
+        @keyframes pulse {
+            0% { transform: scale(1); } 50% { transform: scale(1.02); } 100% { transform: scale(1); }
+        }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20% { transform: translateX(-4px); }
+            40% { transform: translateX(4px); }
+            60% { transform: translateX(-3px); }
+            80% { transform: translateX(3px); }
+        }
+
+        .score-display { text-align: center; padding: 2.5rem 1.25rem; }
         .score-display .score-num {
-            font-size: 3.5rem;
-            font-weight: 800;
-            letter-spacing: -0.03em;
+            font-size: 4rem;
+            font-weight: 900;
+            letter-spacing: -0.04em;
+            line-height: 1;
+            animation: bounceIn 0.6s cubic-bezier(0.22, 1, 0.36, 1);
         }
-        .score-display .score-label {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-            margin-top: 0.25rem;
+        .score-display .score-label { color: var(--text-secondary); font-size: 0.92rem; margin-top: 0.4rem; font-weight: 500; }
+        @keyframes bounceIn {
+            0% { transform: scale(0.4); opacity: 0; }
+            60% { transform: scale(1.08); opacity: 1; }
+            100% { transform: scale(1); }
         }
 
-        /* Back button */
         .back-btn {
             display: inline-flex;
             align-items: center;
             gap: 0.4rem;
-            padding: 0.4rem 0;
-            font-size: 0.85rem;
-            font-weight: 500;
+            padding: 0.45rem 0;
+            font-size: 0.86rem;
+            font-weight: 600;
             color: var(--primary);
             background: none;
             border: none;
             cursor: pointer;
-            margin-bottom: 0.75rem;
+            margin-bottom: 0.8rem;
             -webkit-tap-highlight-color: transparent;
         }
+        .back-btn:active { transform: translateX(-3px); }
 
-        /* Bottom navigation */
         .bottom-nav {
             position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: var(--card);
-            border-top: 1px solid var(--border);
+            bottom: 0; left: 0; right: 0;
+            z-index: 100;
+            padding: 0.55rem 0.75rem calc(0.55rem + var(--safe-bottom));
             display: flex;
             justify-content: space-around;
-            padding: 0.5rem 0 calc(0.5rem + var(--safe-bottom));
-            z-index: 100;
-            box-shadow: 0 -2px 10px rgba(0,0,0,0.04);
+            align-items: center;
+            background: rgba(255, 255, 255, 0.82);
+            -webkit-backdrop-filter: saturate(180%) blur(20px);
+            backdrop-filter: saturate(180%) blur(20px);
+            border-top: 1px solid rgba(99, 102, 241, 0.06);
+            box-shadow: 0 -4px 20px rgba(15, 10, 30, 0.05);
         }
         .nav-item {
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 0.2rem;
+            gap: 0.12rem;
             background: none;
             border: none;
             color: var(--text-light);
             font-size: 0.6rem;
-            font-weight: 600;
-            padding: 0.3rem 0.75rem;
-            border-radius: 8px;
+            font-weight: 700;
+            padding: 0.35rem 0.8rem;
+            border-radius: 12px;
             cursor: pointer;
             -webkit-tap-highlight-color: transparent;
-            transition: color 0.15s;
+            transition: all 0.2s cubic-bezier(0.22, 1, 0.36, 1);
+            position: relative;
         }
-        .nav-item.active { color: var(--primary); }
+        .nav-item.active {
+            color: var(--primary);
+            background: var(--primary-glow);
+        }
+        .nav-item.active::before {
+            content: '';
+            position: absolute;
+            top: -0.55rem;
+            left: 50%; transform: translateX(-50%);
+            width: 18px; height: 3px;
+            border-radius: 2px;
+            background: linear-gradient(90deg, var(--primary), var(--primary-light));
+        }
         .nav-item .nav-icon { font-size: 1.4rem; line-height: 1; }
 
-        /* Exam info cards */
-        .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin: 0.75rem 0; }
+        .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; margin: 0.9rem 0; }
         .info-box {
-            background: #f8fafc;
-            border-radius: 12px;
-            padding: 0.85rem;
+            background: linear-gradient(150deg, #f8f7ff, #f0ecff);
+            border-radius: var(--radius-sm);
+            padding: 0.95rem;
             text-align: center;
-            border: 1px solid var(--border);
+            border: 1px solid rgba(99, 102, 241, 0.08);
         }
-        .info-box .info-val { font-size: 1.3rem; font-weight: 700; color: var(--primary); }
-        .info-box .info-label { font-size: 0.7rem; color: var(--text-secondary); margin-top: 0.15rem; }
+        .info-box .info-val {
+            font-size: 1.4rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .info-box .info-label { font-size: 0.7rem; color: var(--text-secondary); margin-top: 0.15rem; font-weight: 600; }
 
-        /* Tips */
-        .tip-item {
-            display: flex;
-            gap: 0.6rem;
-            padding: 0.6rem 0;
-            align-items: flex-start;
-        }
+        .tip-item { display: flex; gap: 0.7rem; padding: 0.7rem 0; align-items: flex-start; }
         .tip-icon { font-size: 1rem; line-height: 1; flex-shrink: 0; margin-top: 0.1rem; }
-        .tip-text { font-size: 0.85rem; color: var(--text-secondary); line-height: 1.5; }
+        .tip-text { font-size: 0.86rem; color: var(--text-secondary); line-height: 1.6; }
 
-        /* Responsive */
         @media (min-width: 768px) {
             .container { padding: 1.5rem 2rem; }
             .card { padding: 1.75rem; }
@@ -403,7 +511,6 @@ function render() {
     }
 }
 
-// === HOME ===
 function renderHome() {
     const info = appData.examInfo;
     let html = `
@@ -427,7 +534,7 @@ function renderHome() {
     html += `</div>
         <div class="card">
             <h2>Key Tips</h2>`;
-    const icons = ['⚠️', '❌', '❌', '⏰', '\u{1F3A4}', '♻️', '\u{1F4F7}', '\u{1F4DD}'];
+    const icons = ['⚠️', '❌', '❌', '⏰', '🎤', '♻️', '📷', '📝'];
     info.tips.forEach((tip, i) => {
         html += `<div class="tip-item"><span class="tip-icon">${icons[i] || '✔️'}</span><span class="tip-text">${tip}</span></div>`;
     });
@@ -445,9 +552,8 @@ function renderHome() {
     return html;
 }
 
-// === TOPICS ===
 function renderTopics() {
-    let html = `<p class="section-label">21 Official Speaking Topics</p><div class="card"><p style="margin-bottom:0.75rem">You'll choose 1 of 2 random topics. Tap any topic to see practice questions.</p><div class="topic-grid">`;
+    let html = `<p class="section-label">21 Official Speaking Topics</p><div class="card"><p style="margin-bottom:0.75rem">You’ll choose 1 of 2 random topics. Tap any topic to see practice questions.</p><div class="topic-grid">`;
     appData.topics.forEach(t => {
         html += `<div class="topic-pill" onclick="showView('topicDetail', {topicId: ${t.id}})">${t.name}</div>`;
     });
@@ -479,14 +585,13 @@ function renderTopicDetail() {
             <ol class="question-list" style="padding-left:1.25rem">`;
     questions.forEach(q => html += `<li class="question-item">${q}</li>`);
     html += `</ol></div>
-        <div class="card" style="background:#fffbeb;border-color:#fde68a">
-            <h3 style="color:#92400e">\u{1F4A1} Tip</h3>
+        <div class="card" style="background:linear-gradient(135deg,#fffbeb,#fef3c7);border-color:#fde68a">
+            <h3 style="color:#92400e">💡 Tip</h3>
             <p style="color:#78350f">Prepare 2-3 sentences for each question. The same stories about your life work across multiple topics!</p>
         </div>`;
     return html;
 }
 
-// === VOCABULARY ===
 function renderVocab() {
     const cats = [...new Set(appData.vocabulary.map(v => v.cat))];
     let html = `<p class="section-label">Vocabulary by Category</p>
@@ -521,7 +626,6 @@ function startFlashcards(cat) {
     render();
 }
 
-// === PHRASES ===
 function renderPhrases() {
     let html = `<p class="section-label">Essential Phrases for the Exam</p>`;
     for (const [category, phrases] of Object.entries(appData.usefulPhrases)) {
@@ -536,7 +640,6 @@ function renderPhrases() {
     return html;
 }
 
-// === PRACTICE ===
 function renderPractice() {
     let html = `<p class="section-label">Practice</p>
         <div class="card">
@@ -562,15 +665,14 @@ function randomTopics() {
     const shuffled = [...appData.topics].sort(() => Math.random() - 0.5);
     const t1 = shuffled[0], t2 = shuffled[1];
     const el = document.getElementById('random-topics');
-    el.innerHTML = `<div style="margin-top:1rem;padding:1rem;background:#f8fafc;border-radius:12px;border:1px solid var(--border)">
-        <p style="font-weight:600;margin-bottom:0.75rem">Your 2 topics:</p>
+    el.innerHTML = `<div style="margin-top:1rem;padding:1.1rem;background:linear-gradient(135deg,#f8f7ff,#f0ecff);border-radius:14px;border:1px solid rgba(99,102,241,0.1)">
+        <p style="font-weight:700;margin-bottom:0.75rem">Your 2 topics:</p>
         <div class="topic-pill active" onclick="showView('topicDetail', {topicId:${t1.id}})" style="display:inline-block;margin:0.25rem">${t1.name}</div>
         <div class="topic-pill active" onclick="showView('topicDetail', {topicId:${t2.id}})" style="display:inline-block;margin:0.25rem">${t2.name}</div>
-        <p style="font-size:0.8rem;color:var(--text-secondary);margin-top:0.75rem">Pick one and practice answering for 5 minutes!</p>
+        <p style="font-size:0.82rem;color:var(--text-secondary);margin-top:0.75rem">Pick one and practice answering for 5 minutes!</p>
     </div>`;
 }
 
-// === QUIZ ===
 let quizState = { questions: [], current: 0, score: 0, answered: false };
 
 function startQuiz() {
@@ -598,8 +700,8 @@ function renderQuiz() {
     const progress = (current / qs.length * 100).toFixed(0);
     let html = `<div class="card">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.5rem">
-            <span style="font-size:0.8rem;color:var(--text-secondary)">${current + 1} / ${qs.length}</span>
-            <span style="font-size:0.8rem;color:var(--text-secondary)">${score} correct</span>
+            <span style="font-size:0.8rem;color:var(--text-secondary);font-weight:600">${current + 1} / ${qs.length}</span>
+            <span style="font-size:0.8rem;color:var(--success);font-weight:700">${score} correct</span>
         </div>
         <div class="progress-bar"><div class="progress-fill" style="width:${progress}%"></div></div>
         <p class="quiz-question">What does this mean?<br><span style="color:var(--primary)">${q.q}</span></p>
@@ -615,7 +717,7 @@ function renderQuiz() {
     });
     html += `</div>`;
     if (answered) {
-        html += `<div style="margin-top:1.25rem"><button class="btn btn-primary btn-full" onclick="nextQuizQuestion()">Next →</button></div>`;
+        html += `<div style="margin-top:1.4rem"><button class="btn btn-primary btn-full" onclick="nextQuizQuestion()">Next →</button></div>`;
     }
     html += `</div>`;
     return html;
@@ -643,15 +745,14 @@ function renderQuizResults() {
     return `<div class="card score-display">
         <div class="score-num" style="color:${passed ? 'var(--success)' : 'var(--error)'}">${pct}%</div>
         <div class="score-label">${score} / ${qs.length} correct</div>
-        <p style="margin-top:1rem;font-size:1.1rem;font-weight:600;color:${passed ? 'var(--success)' : 'var(--error)'}">${passed ? 'GUTT GEMAACH! \u{1F389}' : 'WEIDER ÜBEN! \u{1F4AA}'}</p>
-        <div style="margin-top:1.5rem;display:flex;gap:0.75rem;flex-direction:column">
+        <p style="margin-top:1rem;font-size:1.1rem;font-weight:700;color:${passed ? 'var(--success)' : 'var(--error)'}">${passed ? 'GUTT GEMAACH! 🎉' : 'WEIDER ÜBEN! 💪'}</p>
+        <div style="margin-top:1.6rem;display:flex;gap:0.8rem;flex-direction:column">
             <button class="btn btn-primary btn-full" onclick="startQuiz()">Try Again</button>
             <button class="btn btn-secondary btn-full" onclick="showView('vocab')">Review Vocabulary</button>
         </div>
     </div>`;
 }
 
-// === FLASHCARD VIEW (injected into render) ===
 function renderFlashcardView() {
     const { deck, current, flipped } = flashcardState;
     if (!deck.length) return '<div class="card"><p>No cards available.</p></div>';
@@ -667,7 +768,7 @@ function renderFlashcardView() {
                     : `<div class="flashcard-front">${card.lux}</div>`}
             </div>
         </div>
-        <p style="text-align:center;font-size:0.75rem;color:var(--text-light);margin:0.5rem 0">Tap to flip</p>
+        <p style="text-align:center;font-size:0.76rem;color:var(--text-light);margin:0.5rem 0;font-weight:500">Tap to flip · Swipe to navigate</p>
         <div class="flashcard-controls">
             <button class="btn btn-secondary btn-sm" onclick="prevCard()">←</button>
             <button class="btn btn-secondary btn-sm" onclick="shuffleDeck()">Shuffle</button>
@@ -685,7 +786,6 @@ function shuffleDeck() {
     flashcardState.current = 0; flashcardState.flipped = false; render();
 }
 
-// Patch render for flashcard view
 const _origRender = render;
 render = function() {
     if (currentView === 'flashcardView') {
@@ -695,7 +795,6 @@ render = function() {
     _origRender();
 };
 
-// Swipe support for flashcards
 let touchStartX = 0;
 document.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].screenX; }, {passive: true});
 document.addEventListener('touchend', e => {
